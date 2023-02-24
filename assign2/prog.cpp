@@ -43,7 +43,39 @@ int parse_command(char command[], char *args[])
 }
 
 // TODO: Add additional functions if you need
+void redirect_input(char* filename)
+{
+	int fd=open(filename,O_RDONLY);
+	if(fd < 0)
+	{
+		printf("Failed to open file",filename);
+		return;
+		
+	}
+	if(dup2(fd,STDIN_FILENO) < 0)
+	{
+		printf("Failed redirect",filename);
+		close(fd);
+		return;
+	}
+	close(fd);
 
+}
+void redirect_output(char* filename)
+{
+	int fd = open(filename,O_WRONLY|O_CREAT|O_TRUNC);
+	if(fd<0)
+	{
+		printf("Failed top open",filename);)
+	}
+
+	if(dup2(fd,STDOUT_FILENO)<0)
+	{
+		printf("Filaed to redirect outpuit,filename);
+		close(fd);
+		return;
+	}
+	close(fd);
 /**
  * @brief The main function of a simple UNIX Shell. You may add additional functions in this file for your implementation
  * @param argc The number of arguments
