@@ -75,7 +75,7 @@ int main(int argc, char *argv[])
 	else if(pid ==0)
 	{
 		int ret=execvp(args[0],args);
-		if(ewr==-1)
+
 		{
 			fprintf(stderr,"Invalid command\n");
 			return 1;
