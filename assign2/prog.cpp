@@ -30,7 +30,16 @@ using namespace std;
  */
 int parse_command(char command[], char *args[])
 {
-    // TODO: implement this function
+ 	int i=0;   // TODO: implement this function
+	char *token=strtok(command, "\n");
+	while(token!=NULL)
+{
+	args[i]=token;
+	token=strtok(NULL,"\n");
+	i++;
+}	
+	args[i]=NULL;
+	return i;
 }
 
 // TODO: Add additional functions if you need
@@ -57,6 +66,28 @@ int main(int argc, char *argv[])
         fgets(command, MAX_LINE, stdin);
         // Parse the input command
         int num_args = parse_command(command, args);
+	pid_t pid=fork();
+	if(pid<0)
+	{
+		fprintf(stderr,"Fork failed\n");
+		return 1;
+	}
+	else if(pid ==0)
+	{
+		int ret=execvp(args[0],args);
+		if(ewr==-1)
+		{
+			fprintf(stderr,"Invalid command\n");
+			return 1;
+		}
+	}
+	else
+	{
+		if (args[num_args-1][0]!='&')
+		{
+			wait(NULL);
+		}
+    
 
         // TODO: Add your code for the implementation
         /**
@@ -65,6 +96,7 @@ int main(int argc, char *argv[])
          * (2) the child process will invoke execvp()
          * (3) parent will invoke wait() unless command included &
          */
+    	}
     }
     return 0;
 }
