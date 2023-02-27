@@ -1,4 +1,3 @@
-
 /**
  * Assignment 2: Simple UNIX Shell
  * @file pcbtable.h
@@ -57,12 +56,6 @@ void redirect_output(char* filename)
 	dup2(fd,STDOUT_FILENO);
 	close(fd);
 }
-/**
- * @brief The main function of a simple UNIX Shell. You may add additional functions in this file for your implementation
- * @param argc The number of arguments
- * @param argv The array of arguments
- * @return The exit status of the program
- */
 int main(int argc, char *argv[])
 {
     char command[MAX_LINE];       // the command that was entered
@@ -80,6 +73,7 @@ int main(int argc, char *argv[])
         fgets(command, MAX_LINE, stdin);
 	//remove newline charater
 	command[strcspn(command,"\n")]=0;
+
 	if(strcmp(command,"!!")==0)
 	{
 		if(history.size()==0)
@@ -92,9 +86,9 @@ int main(int argc, char *argv[])
 	}
 	else
 	{
-	//store command in history
-	history.push_back(command);
+		history.push_back(command);
 	}
+	
         // Parse the input command
         int num_args = parse_command(command, args);
 	int i=0;
@@ -155,7 +149,7 @@ int main(int argc, char *argv[])
          * (3) parent will invoke wait() unless command included &
          */
     	}
-    }	
+    }
     return 0;
-	}
 }
+
