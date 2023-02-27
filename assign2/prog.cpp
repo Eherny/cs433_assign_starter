@@ -80,6 +80,7 @@ int main(int argc, char *argv[])
         fgets(command, MAX_LINE, stdin);
 	//remove newline charater
 	command[strcspn(command,"\n")]=0;
+	
 	//store command in history
 	history.push_back(command);
         // Parse the input command
@@ -121,11 +122,11 @@ int main(int argc, char *argv[])
 			redirect_output(output_file);
 		}
 	int ret =execvp(args[0],args);
-if(ret==-1)
-{
+	if(ret==-1)
+	{
 	fprintf(stderr,"Invalid command\n");
 	return 1;
-}	
+	}	
 	else
 	{
 		if (args[num_args-1][0]!='&')
