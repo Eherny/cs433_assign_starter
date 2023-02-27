@@ -80,9 +80,21 @@ int main(int argc, char *argv[])
         fgets(command, MAX_LINE, stdin);
 	//remove newline charater
 	command[strcspn(command,"\n")]=0;
-	
+	if(strcmp(command,"!!")==0)
+	{
+		if(history.size()==0)
+		{
+			printf("No commands in history.\n");
+			continue;
+		}
+		strcpy(command,history[history.size()-1].c_str());
+		printf("%s\n",command);
+	}
+	else
+	{
 	//store command in history
 	history.push_back(command);
+	}
         // Parse the input command
         int num_args = parse_command(command, args);
 	int i=0;
@@ -143,6 +155,7 @@ int main(int argc, char *argv[])
          * (3) parent will invoke wait() unless command included &
          */
     	}
-    }
+    }	
     return 0;
+	}
 }
