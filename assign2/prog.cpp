@@ -47,14 +47,14 @@ int parse_command(char command[], char *args[])
 void redirect_input(char* filename)
 {
 	int fd=open(filename,O_RDONLY);
-	dup2(fd,0);
+	dup2(fd,STDIN_FILENO);
 	close(fd);
 
 }
 void redirect_output(char* filename)
 {
-	int fd = open(filename, O_CREAT| O_WRONLY| O_TRUNC,0644);
-	dup2(fd,1);
+	int fd = open(filename, O_CREAT| O_WRONLY| O_TRUNC|O_APPEND,0644);
+	dup2(fd,STDOUT_FILENO);
 	close(fd);
 }
 int main(int argc, char *argv[])
