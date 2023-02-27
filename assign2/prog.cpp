@@ -54,6 +54,7 @@ void redirect_input(char* filename)
 void redirect_output(char* filename)
 {
 	int fd = open(filename, O_CREAT| O_WRONLY| O_TRUNC,0644);
+	dup2(fd,STDOUT_FILENO);
 	close(fd);
 }
 /**
