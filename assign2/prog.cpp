@@ -142,9 +142,9 @@ int main(int argc, char *argv[])
             wait(NULL);
         }
     	}
+    input_file=NULL;
+    output_file=NULL;
 	} // Add this closing curly brace here
-	input_file=NULL;
-	output_file=NULL;
  return 0;
 }	
 
