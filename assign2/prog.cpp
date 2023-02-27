@@ -28,35 +28,34 @@ using namespace std;
  * @param args
  * @return int
  */
-int parse_command(char command[], char *args[])
-{
- 	int i = 0;   // TODO: implement this function
-	char *token = strtok(command, " ");
-	while(token!=NULL)
-{
-	args[i]=token;
-	token = strtok(NULL," ");
-	i++;
-}	
-	args[i]=NULL;
 
-	return i;
+int parse_command(char *command, char **args)
+{
+    int i = 0;
+    args[i] = strtok(command, " ");
+    while (args[i] != NULL)
+    {
+        i++;
+        args[i] = strtok(NULL, " ");
+    }
+    return i;
 }
 
-// TODO: Add additional functions if you need
 void redirect_input(char* filename)
 {
 	int fd=open(filename,O_RDONLY);
-	dup2(fd,STDIN_FILENO);
+	dup2(fd,0);
 	close(fd);
 
 }
+
 void redirect_output(char* filename)
 {
 	int fd = open(filename, O_CREAT| O_WRONLY| O_TRUNC|O_APPEND,0644);
-	dup2(fd,STDOUT_FILENO);
+	dup2(fd,1);
 	close(fd);
 }
+
 int main(int argc, char *argv[])
 {
     char command[MAX_LINE];       // the command that was entered
@@ -111,38 +110,43 @@ int main(int argc, char *argv[])
 
         //fork a child process
         pid_t pid=fork();
-pid_t pid=fork();
 
-if (pid < 0) {
-    // error occurred while forking
-    perror("fork failed");
-    exit(1);
-} else if (pid == 0) {
-    // child process
+        if( pid < 0 )
+        {
+            fprintf(stderr,"Fork failed\n");
+            return 1;
+        }
+        else if(pid ==0)
+        { //child process
+            if(input_file!=NULL)
+            {
+                redirect_input(input_file);
+            }
+            if(output_file !=NULL)
+            {
+                redirect_output(output_file);
+            }
 
-    // redirect input if necessary
-    if (input_file != NULL) {
-        redirect_input(input_file);
+            int ret =execvp(args[0],args);
+            if(ret==-1)
+            {
+                fprintf(stderr,"Invalid command\n");
+                return 1;
+            }
+        }
+        else
+        {
+            // Parent process
+            if (args[num_args-1][0] != '&')
+            {
+                wait(NULL);
+            }
+        }
+
+        // Reset input/output file pointers
+        input_file = NULL;
+        output_file = NULL;
     }
-
-    // redirect output if necessary
-    if (output_file != NULL) {
-        redirect_output(output_file);
-    }
-
-    // execute the command
-    execvp(args[0], args);
-
-    // if execvp returns, it means there was an error
-    perror("execvp failed");
-    exit(1);
-} else {
-    // parent process
-    wait(NULL);
-}
-
-
-   
     return 0;
 }
 
