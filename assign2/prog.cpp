@@ -30,15 +30,16 @@ using namespace std;
  */
 int parse_command(char command[], char *args[])
 {
- 	int i=0;   // TODO: implement this function
-	char *token=strtok(command, " ");
+ 	int i = 0;   // TODO: implement this function
+	char *token = strtok(command, " ");
 	while(token!=NULL)
 {
 	args[i]=token;
-	token=strtok(NULL,"");
+	token = strtok(NULL," ");
 	i++;
 }	
 	args[i]=NULL;
+
 	return i;
 }
 
