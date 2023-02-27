@@ -128,10 +128,6 @@ int main(int argc, char *argv[])
         {
             redirect_output(output_file);
         }
-	else
-	{
-		dup2(STDOUT_FILENO,fileno(stdout));
-	}
         int ret =execvp(args[0],args);
         if(ret==-1)
         {
@@ -147,6 +143,8 @@ int main(int argc, char *argv[])
         }
     	}
 	} // Add this closing curly brace here
+	input_file=NULL;
+	output_file=NULL;
  return 0;
 }	
 
