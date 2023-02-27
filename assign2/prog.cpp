@@ -15,6 +15,7 @@
 #include <fcntl.h>
 #include <cstring>
 #include <unistd.h>
+#include <vector>
 #include <sys/wait.h>
 
 using namespace std;
@@ -63,7 +64,7 @@ void redirect_input(char* filename)
 }
 void redirect_output(char* filename)
 {
-	int fd = open(filename,O_WRONLY|O_CREAT|O_TRUNC);
+	int fd = open(filename,O_WRONLY|O_CREAT|O_TRUNC,0644);
 	if(fd<0)
 	{
 		printf("Failed top open",filename);)
@@ -87,6 +88,7 @@ int main(int argc, char *argv[])
     char command[MAX_LINE];       // the command that was entered
     char *args[MAX_LINE / 2 + 1]; // parsed out command line arguments
     int should_run = 1;           /* flag to determine when to exit program */
+    vector<string> history;
 
     // TODO: Add additional variables for the implementation.
 
@@ -96,18 +98,40 @@ int main(int argc, char *argv[])
         fflush(stdout);
         // Read the input command
         fgets(command, MAX_LINE, stdin);
+	//remove newline charater
+	command[strcspn(command,"\n")]=0;
+	//store command in history
+	history.push_back(command);
         // Parse the input command
         int num_args = parse_command(command, args);
+	int i=0;
+
+	while(args[i]!=NULL)
+	{
+		if(strcmp(args[i],"<")==0)
+		{
+			redirect_input(args[i+1]);
+			args[i]=NULL;
+		}
+		else if(strcmp(args[i],">")==0)
+		{
+		redirect_output(args[i+1]);
+		args[i]=NULL;
+		}
+				i++;
+	}
+	//fork a child process
 	pid_t pid=fork();
-	if(pid<0)
+
+	if( pid < 0 )
 	{
 		fprintf(stderr,"Fork failed\n");
 		return 1;
 	}
 	else if(pid ==0)
-	{
+	{ //child process
 		int ret=execvp(args[0],args);
-
+		if(ret==-1)
 		{
 			fprintf(stderr,"Invalid command\n");
 			return 1;
