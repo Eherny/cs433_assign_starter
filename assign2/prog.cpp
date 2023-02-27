@@ -85,20 +85,22 @@ int main(int argc, char *argv[])
         // Parse the input command
         int num_args = parse_command(command, args);
 	int i=0;
+	char *input_file=NULL;
+	char *output_file=NULL;
 
 	while(args[i]!=NULL)
 	{
 		if(strcmp(args[i],"<")==0)
 		{
-			redirect_input(args[i+1]);
+			input_file=args[i+1];
 			args[i]=NULL;
 		}
 		else if(strcmp(args[i],">")==0)
 		{
-		redirect_output(args[i+1]);
+		output_file= args[i+1];
 		args[i]=NULL;
 		}
-				i++;
+		i++;
 	}
 	//fork a child process
 	pid_t pid=fork();
@@ -110,13 +112,20 @@ int main(int argc, char *argv[])
 	}
 	else if(pid ==0)
 	{ //child process
-		int ret=execvp(args[0],args);
-		if(ret==-1)
+		if(input_file!=NULL)
+			{
+				redirect_input(input_file);
+			}
+		if(output_file !=NULL)
 		{
-			perror("execvp");
-			exit(1);
+			redirect_output(output_file);
 		}
-	}
+	int ret =execvp(args[0],args);
+if(ret==-1)
+{
+	fprintf(stderr,"Invalid command\n");
+	return 1;
+}	
 	else
 	{
 		if (args[num_args-1][0]!='&')
