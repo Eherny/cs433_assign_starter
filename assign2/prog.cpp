@@ -135,12 +135,13 @@ int main(int argc, char *argv[])
         }
     }
     else
-    {
+    	{
         if (args[num_args-1][0]!='&')
         {
             wait(NULL);
         }
-    }
-} // Add this closing curly brace here
-
+    	}
+	} // Add this closing curly brace here
+ return 0;
+}	
 
