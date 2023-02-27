@@ -112,42 +112,7 @@ int main(int argc, char *argv[])
         //fork a child process
         pid_t pid=fork();
 
-        if( pid < 0 )
-        {
-            fprintf(stderr,"Fork failed\n");
-            return 1;
-        }
-        else if(pid ==0)
-        { //child process
-            if(input_file!=NULL)
-            {
-                redirect_input(input_file);
-            }
-            if(output_file !=NULL)
-            {
-                redirect_output(output_file);
-            }
-
-            int ret =execvp(args[0],args);
-            if(ret==-1)
-            {
-                fprintf(stderr,"Invalid command\n");
-                return 1;
-            }
-        }
-        else
-        {
-            // Parent process
-            if (args[num_args-1][0] != '&')
-            {
-                wait(NULL);
-            }
-        }
-
-        // Reset input/output file pointers
-        input_file = NULL;
-        output_file = NULL;
-    }
+   
     return 0;
 }
 
