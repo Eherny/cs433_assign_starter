@@ -113,8 +113,8 @@ int main(int argc, char *argv[])
 		int ret=execvp(args[0],args);
 		if(ret==-1)
 		{
-			fprintf(stderr,"Invalid command\n");
-			return 1;
+			perror("execvp");
+			exit(1);
 		}
 	}
 	else
