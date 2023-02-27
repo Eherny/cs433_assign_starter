@@ -31,11 +31,11 @@ using namespace std;
 int parse_command(char command[], char *args[])
 {
  	int i=0;   // TODO: implement this function
-	char *token=strtok(command, "\n");
+	char *token=strtok(command, " ");
 	while(token!=NULL)
 {
 	args[i]=token;
-	token=strtok(NULL,"\n");
+	token=strtok(NULL,"");
 	i++;
 }	
 	args[i]=NULL;
@@ -127,6 +127,10 @@ int main(int argc, char *argv[])
         {
             redirect_output(output_file);
         }
+	else
+	{
+		dup2(STDOUT_FILENO,fileno(stdout));
+	}
         int ret =execvp(args[0],args);
         if(ret==-1)
         {
