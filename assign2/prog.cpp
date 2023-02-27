@@ -111,6 +111,36 @@ int main(int argc, char *argv[])
 
         //fork a child process
         pid_t pid=fork();
+pid_t pid=fork();
+
+if (pid < 0) {
+    // error occurred while forking
+    perror("fork failed");
+    exit(1);
+} else if (pid == 0) {
+    // child process
+
+    // redirect input if necessary
+    if (input_file != NULL) {
+        redirect_input(input_file);
+    }
+
+    // redirect output if necessary
+    if (output_file != NULL) {
+        redirect_output(output_file);
+    }
+
+    // execute the command
+    execvp(args[0], args);
+
+    // if execvp returns, it means there was an error
+    perror("execvp failed");
+    exit(1);
+} else {
+    // parent process
+    wait(NULL);
+}
+
 
    
     return 0;
