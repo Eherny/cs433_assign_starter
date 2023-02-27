@@ -65,91 +65,82 @@ int main(int argc, char *argv[])
 
     // TODO: Add additional variables for the implementation.
 
-    while (should_run)
+   while (should_run)
+{
+    printf("osh>");
+    fflush(stdout);
+    // Read the input command
+    fgets(command, MAX_LINE, stdin);
+    //remove newline charater
+    command[strcspn(command,"\n")]=0;
+
+    if(strcmp(command,"!!")==0)
     {
-        printf("osh>");
-        fflush(stdout);
-        // Read the input command
-        fgets(command, MAX_LINE, stdin);
-	//remove newline charater
-	command[strcspn(command,"\n")]=0;
-
-	if(strcmp(command,"!!")==0)
-	{
-		if(history.size()==0)
-		{
-			printf("No commands in history.\n");
-			continue;
-		}
-		strcpy(command,history[history.size()-1].c_str());
-		printf("%s\n",command);
-	}
-	else
-	{
-		history.push_back(command);
-	}
-	
-        // Parse the input command
-        int num_args = parse_command(command, args);
-	int i=0;
-	char *input_file=NULL;
-	char *output_file=NULL;
-
-	while(args[i]!=NULL)
-	{
-		if(strcmp(args[i],"<")==0)
-		{
-			input_file=args[i+1];
-			args[i]=NULL;
-		}
-		else if(strcmp(args[i],">")==0)
-		{
-		output_file= args[i+1];
-		args[i]=NULL;
-		}
-		i++;
-	}
-	//fork a child process
-	pid_t pid=fork();
-
-	if( pid < 0 )
-	{
-		fprintf(stderr,"Fork failed\n");
-		return 1;
-	}
-	else if(pid ==0)
-	{ //child process
-		if(input_file!=NULL)
-			{
-				redirect_input(input_file);
-			}
-		if(output_file !=NULL)
-		{
-			redirect_output(output_file);
-		}
-	int ret =execvp(args[0],args);
-	if(ret==-1)
-	{
-	fprintf(stderr,"Invalid command\n");
-	return 1;
-	}	
-	else
-	{
-		if (args[num_args-1][0]!='&')
-		{
-			wait(NULL);
-		}
-    
-
-        // TODO: Add your code for the implementation
-        /**
-         * After reading user input, the steps are:
-         * (1) fork a child process using fork()
-         * (2) the child process will invoke execvp()
-         * (3) parent will invoke wait() unless command included &
-         */
-    	}
+        if(history.size()==0)
+        {
+            printf("No commands in history.\n");
+            continue;
+        }
+        strcpy(command,history[history.size()-1].c_str());
+        printf("%s\n",command);
     }
-    return 0;
-}
+    else
+    {
+        history.push_back(command);
+    }
+
+    // Parse the input command
+    int num_args = parse_command(command, args);
+    int i=0;
+    char *input_file=NULL;
+    char *output_file=NULL;
+
+    while(args[i]!=NULL)
+    {
+        if(strcmp(args[i],"<")==0)
+        {
+            input_file=args[i+1];
+            args[i]=NULL;
+        }
+        else if(strcmp(args[i],">")==0)
+        {
+            output_file= args[i+1];
+            args[i]=NULL;
+        }
+        i++;
+    }
+    //fork a child process
+    pid_t pid=fork();
+
+    if( pid < 0 )
+    {
+        fprintf(stderr,"Fork failed\n");
+        return 1;
+    }
+    else if(pid ==0)
+    { //child process
+        if(input_file!=NULL)
+        {
+            redirect_input(input_file);
+        }
+        if(output_file !=NULL)
+        {
+            redirect_output(output_file);
+        }
+        int ret =execvp(args[0],args);
+        if(ret==-1)
+        {
+            fprintf(stderr,"Invalid command\n");
+            return 1;
+        }
+    }
+    else
+    {
+        if (args[num_args-1][0]!='&')
+        {
+            wait(NULL);
+        }
+    }
+} // Add this closing curly brace here
+
 
