@@ -1,21 +1,11 @@
-/**
- * Assignment 2: Simple UNIX Shell
- * @file pcbtable.h
- * @author Eric Hernandez,Chris Mead (TODO: your name)
- * @brief This is the main function of a simple UNIX Shell. You may add additional functions in this file for your implementation
- * @version 0.1
- */
-// You must complete the all parts marked as "TODO". Delete "TODO" after you are done.
-// Remember to add sufficient and clear comments to your code
-
 #include <stdio.h>
 #include <unistd.h>
 #include <iostream>
 #include <fcntl.h>
 #include <cstring>
 #include <unistd.h>
-#include <vector>
 #include <sys/wait.h>
+#include <vector>
 
 using namespace std;
 
@@ -28,125 +18,127 @@ using namespace std;
  * @param args
  * @return int
  */
-
-int parse_command(char *command, char **args)
+int parse_command(char command[], char *args[])
 {
-    int i = 0;
-    args[i] = strtok(command, " ");
-    while (args[i] != NULL)
+    int count = 0;
+    char *store = strtok(command, " ,\n");
+    while (store != NULL)
     {
-        i++;
-        args[i] = strtok(NULL, " ");
+        if (*store == '<') // input redirection
+        {
+            char *input_file = strtok(NULL, " ,\n");
+            int fd = open(input_file, O_RDONLY);
+            if (fd < 0)
+            {
+                perror("Error opening input file");
+                // return -1; // uncomment this line to terminate the program on error
+            }
+            else
+            {
+                dup2(fd, STDIN_FILENO); // redirect stdin to the input file
+                close(fd);
+            }
+        }
+        else if (*store == '>') // output redirection
+        {
+            char *output_file = strtok(NULL, " ,\n");
+            int fd = open(output_file, O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
+            if (fd < 0)
+            {
+                perror("Error opening output file");
+                // return -1; // uncomment this line to terminate the program on error
+            }
+            else
+            {
+                dup2(fd, STDOUT_FILENO); // redirect stdout to the output file
+                close(fd);
+            }
+        }
+        else
+        {
+            args[count++] = store;
+        }
+        store = strtok(NULL, " ,\n");
     }
-    return i;
+    args[count] = NULL;
+    return count;
 }
 
-void redirect_input(char* filename)
-{
-	int fd=open(filename,O_RDONLY);
-	dup2(fd,0);
-	close(fd);
 
+
+// TODO: Add additional functions if you need
+
+
+/***************************************
+ 
+******************************************/
+void forking(char *args[])
+{
+    pid_t pid;
+    pid = fork();
+
+    if (pid < 0) // error has happened
+        {
+            printf("Fork Failure");
+	
+        } 
+    else if (pid == 0) // child process
+        {
+            execvp(args[0], args);
+            printf("Command not found\n");
+	
+        } 
+    else
+        {   //this is the parent process waiting for the child
+            wait(NULL);
+        }
 }
 
-void redirect_output(char* filename)
-{
-	int fd = open(filename, O_CREAT| O_WRONLY| O_TRUNC|O_APPEND,0644);
-	dup2(fd,1);
-	close(fd);
-}
 
-int main(int argc, char *argv[])
-{
-    char command[MAX_LINE];       // the command that was entered
-    char *args[MAX_LINE / 2 + 1]; // parsed out command line arguments
-    int should_run = 1;           /* flag to determine when to exit program */
+/**
+ * @brief The main function of a simple UNIX Shell. You may add additional functions in this file for your implementation
+ * @param argc The number of arguments
+ * @param argv The array of arguments
+ * @return The exit status of the program
+ */
+int main(int argc, char *argv[]) {
+    char command[MAX_LINE];
+    char *args[MAX_LINE / 2 + 1];
+    int should_run = 1;
     vector<string> history;
-
-    while (should_run)
-    {
+  
+    while (should_run) {
         printf("osh>");
         fflush(stdout);
-        // Read the input command
         fgets(command, MAX_LINE, stdin);
-        //remove newline charater
-        command[strcspn(command,"\n")]=0;
-
-        if(strcmp(command,"!!")==0)
-        {
-            if(history.size()==0)
-            {
-                printf("No commands in history.\n");
-                continue;
-            }
-            strcpy(command,history[history.size()-1].c_str());
-            printf("%s\n",command);
-        }
-        else
-        {
-            history.push_back(command);
-        }
-
-        // Parse the input command
+        string copy = command;
         int num_args = parse_command(command, args);
-        int i=0;
-        char *input_file=NULL;
-        char *output_file=NULL;
-
-        while(args[i]!=NULL)
-        {
-            if(strcmp(args[i],"<")==0)
-            {
-                input_file=args[i+1];
-                args[i]=NULL;
+      
+        if(strcmp(command, "exit") == 0) {
+            should_run = 0;
+        } else if (strcmp(command, "!!") == 0) {
+            if (history.empty()) {
+                printf("No command history found.\n");
+            } else {
+                strcpy(command, history.back().c_str());
+                int num_args = parse_command(command,args);
+                forking(args);
             }
-            else if(strcmp(args[i],">")==0)
-            {
-                output_file= args[i+1];
-                args[i]=NULL;
-            }
-            i++;
+        } else {
+            history.push_back(copy);
+            forking(args);
         }
 
-        //fork a child process
-        pid_t pid=fork();
-
-        if( pid < 0 )
-        {
-            fprintf(stderr,"Fork failed\n");
-            return 1;
-        }
-        else if(pid ==0)
-        { //child process
-            if(input_file!=NULL)
-            {
-                redirect_input(input_file);
-            }
-            if(output_file !=NULL)
-            {
-                redirect_output(output_file);
-            }
-
-            int ret =execvp(args[0],args);
-            if(ret==-1)
-            {
-                fprintf(stderr,"Invalid command\n");
-                return 1;
-            }
-        }
-        else
-        {
-            // Parent process
-            if (args[num_args-1][0] != '&')
-            {
-                wait(NULL);
-            }
+        // Handle the "&" character to run a command in the background
+        bool background = false;
+        if (num_args > 0 && strcmp(args[num_args - 1], "&") == 0) {
+            background = true;
+            args[num_args - 1] = NULL;
         }
 
-        // Reset input/output file pointers
-        input_file = NULL;
-        output_file = NULL;
+        if (!background && strcmp(command, "!!") != 0) {
+            wait(NULL);
+        }
     }
     return 0;
 }
-
