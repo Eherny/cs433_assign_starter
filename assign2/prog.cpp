@@ -115,7 +115,7 @@ int main(int argc, char *argv[])
     char command[MAX_LINE];       // the command that was entered
     char *args[MAX_LINE / 2 + 1]; // parsed out command line arguments
     int should_run = 1;           /* flag to determine when to exit program */
-    vector <history>
+    vector <string> history;
     // TODO: Add additional variables for the implementation.
 
   
