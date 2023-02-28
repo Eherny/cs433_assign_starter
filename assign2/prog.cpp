@@ -121,6 +121,7 @@ int main(int argc, char *argv[]) {
                 printf("No command history found.\n");
             } else {
                 strcpy(command, history.back().c_str());
+		printf("%s",command);
                 int num_args = parse_command(command,args);
                 forking(args);
             }
