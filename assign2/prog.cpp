@@ -115,7 +115,7 @@ int main(int argc, char *argv[])
     char command[MAX_LINE];       // the command that was entered
     char *args[MAX_LINE / 2 + 1]; // parsed out command line arguments
     int should_run = 1;           /* flag to determine when to exit program */
-    char history[100];
+    vector<string> history;
     // TODO: Add additional variables for the implementation.
 
   
@@ -144,20 +144,21 @@ int main(int argc, char *argv[])
         }
         else if (strcmp(command, "!!") == 0)//user has requested to duplicate last request
         {
-            if(strlen(history) == 0)
+            if(history.empty())
             {
                 printf("No commands in history.\n");
             }
           else
             {
-            strcpy(command, history); //copies the last command in the history to the 'char command'1
+            strcpy(command, history.back().c_str()); //copies the last command in the history to the 'char command'1
+            printf("%s",command);	
             int num_args = parse_command(command,args); //parses command
             forking(args);//runs command through the forking process.
             }
         }
         else
         {
-          strcpy(history, command);
+          history.push_back(copy);
           forking(args);
         }
         cout << endl;
