@@ -115,7 +115,7 @@ int main(int argc, char *argv[])
     char command[MAX_LINE];       // the command that was entered
     char *args[MAX_LINE / 2 + 1]; // parsed out command line arguments
     int should_run = 1;           /* flag to determine when to exit program */
-    char history[100];
+    vector <history>
     // TODO: Add additional variables for the implementation.
 
   
@@ -150,7 +150,8 @@ int main(int argc, char *argv[])
             }
           else
             {
-            strcpy(command, history); //copies the last command in the history to the 'char command'1
+            strcpy(command, history.back().c_str()); //copies the last command in the history to the 'char command'1
+	    printf("%s",command);				     
             int num_args = parse_command(command,args); //parses command
             forking(args);//runs command through the forking process.
             }
