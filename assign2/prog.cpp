@@ -52,6 +52,7 @@ int parse_command(char command[], char *args[])
         }
         else if (*store == '>') // output redirection
         {
+
             file = strtok(NULL, " ,\n"); //char* output_file will hold the token given from strtok(the next argument)
           out=true;
           
@@ -69,7 +70,11 @@ int parse_command(char command[], char *args[])
     }
   else
     {
-    	 args[count] = store;//else making the last equal to NULL to be used for execvp
+      if(store!=NULL)
+      {
+        args[count++]=store;
+      }
+    	 args[count] = NULL;//else making the last equal to NULL to be used for execvp
 	     ampersand=false;//make sure that ampersand is false
     }
   return count;//return count
