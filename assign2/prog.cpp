@@ -1,12 +1,12 @@
 /**
  * Assignment 2: Simple UNIX Shell
  * @file pcbtable.h
- * @author Eric Hernandez,Christopher Mead(TODO: your name)
- * @brief This is the main function of a simple UNIX Shell. You may add additional functions in this file for your implementation
+ * @author Eric Hernandez & Christopher Mead
+ * @brief This is the main function of a simple UNIX Shell. You may add
+ * additional functions in this file for your implementation
  * @version 0.1
  */
-// You must complete the all parts marked as "TODO". Delete "TODO" after you are done.
-// Remember to add sufficient and clear comments to your code
+
 
 //
 // * @brief This is the main function of a simple UNIX Shell. You may add additional functions in this file for your implementation
@@ -27,7 +27,11 @@
 using namespace std;
 
 #define MAX_LINE 80 // The maximum length command
-bool ampersand=false; //implemented to hold a value in the case a command has & as a arguement
+bool in=false;
+bool out=false;
+bool ampersand=false; 
+char* file;
+//implemented to hold a value in the case a command has & as a arguement
 /**
  * @brief parse out the command and arguments from the input command separated by spaces
  *
@@ -43,31 +47,14 @@ int parse_command(char command[], char *args[])
     {
         if (*store == '<') // input redirection
         {
-            char *input_file = strtok(NULL, " ,\n"); //char* input_file will hold the token given from strtok(the next argument)
-            int fd = open(input_file, O_RDONLY);//creates a new file with the name of the token given to input_file
-            if (fd < 0)//an error occured when making/opening a file
-            {
-                perror("Error opening input file");
-            }
-            else//file was created or opened without a problem
-            {
-                dup2(fd, STDIN_FILENO); //copy the contents of the arguement into this file
-                close(fd);//close the file
-            }
+            file = strtok(NULL, " ,\n"); //char* input_file will hold the token given from strtok(the next argument)
+          in=true;
         }
         else if (*store == '>') // output redirection
         {
-            char *output_file = strtok(NULL, " ,\n"); //char* output_file will hold the token given from strtok(the next argument)
-            int fd = open(output_file, O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);//opens a file which we will get arguments from
-            if (fd < 0) //an error occured when opening a file
-            {
-                perror("Error opening output file");
-            }
-            else //file was created or opened without a problem
-            {
-                dup2(fd, STDOUT_FILENO); //copy the contents of the file to act as an argument
-                close(fd); //closes the file
-            }
+            file = strtok(NULL, " ,\n"); //char* output_file will hold the token given from strtok(the next argument)
+          out=true;
+          
         }
         else //special cases have been dealt with
         {
@@ -104,6 +91,18 @@ void forking(char* args[])
     } 
     else if (pid == 0) // child process
     {
+      if(in)
+      {
+        int fd = open(file, O_RDONLY);
+        dup2(fd,STDIN_FILENO);
+        close(fd);
+      }
+      else if(out)
+      {
+        int fd=open(file,O_CREAT |O_TRUNC|O_WRONLY);
+        dup2(fd,STDOUT_FILENO);
+        close(fd);
+      }
       execvp(args[0], args);//processes the arguments stored in the args[] array
       printf("Command not found\n");//the given arguments aren't of those native to the system or those which we created
     } 
@@ -144,6 +143,7 @@ int main(int argc, char *argv[])
         fflush(stdout);
         // Read the input command
         fgets(command, MAX_LINE, stdin);
+       ampersand= false;
 
         string copy = command; //copies the command so it can be put into history
 	for(int i=0; i<strlen(command); i++)
@@ -153,11 +153,12 @@ int main(int argc, char *argv[])
           command[i] = ' '; //
           command[i+1] = '&'; //
           command[i+2] = '\0'; //
+          ampersand=true;
         }
       }
         // Parse the input command
         int num_args = parse_command(command, args); //calls the parse command to separate the command into args
-	 ampersand= false;
+	
       
         // TODO: Add your code for the implementation
         /**
@@ -194,3 +195,4 @@ int main(int argc, char *argv[])
     }
   return 0;
 }
+
