@@ -69,7 +69,7 @@ int parse_command(char command[], char *args[])
     }
   else
     {
-    	 args[count] = NULL;//else making the last equal to NULL to be used for execvp
+    	 args[count] = store;//else making the last equal to NULL to be used for execvp
 	     ampersand=false;//make sure that ampersand is false
     }
   return count;//return count
