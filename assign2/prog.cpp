@@ -27,10 +27,10 @@
 using namespace std;
 
 #define MAX_LINE 80 // The maximum length command
-bool in=false;
-bool out=false;
-bool ampersand=false; 
-char* file;
+bool in=false;// global command if there is a  <
+bool out=false;//global command if there is a >
+bool ampersand=false; //global command if there is a & present
+char* file;// name of file being created
 //implemented to hold a value in the case a command has & as a arguement
 /**
  * @brief parse out the command and arguments from the input command separated by spaces
@@ -48,13 +48,13 @@ int parse_command(char command[], char *args[])
         if (*store == '<') // input redirection
         {
             file = strtok(NULL, " ,\n"); //char* input_file will hold the token given from strtok(the next argument)
-          in=true;
+          in=true;//set in to true
         }
         else if (*store == '>') // output redirection
         {
 
             file = strtok(NULL, " ,\n"); //char* output_file will hold the token given from strtok(the next argument)
-          out=true;
+          out=true; //set out to true
           
         }
         else //special cases have been dealt with
@@ -72,7 +72,7 @@ int parse_command(char command[], char *args[])
     {
       if(store!=NULL)
       {
-        args[count++]=store;
+        args[count++]=store; //set last argument to the command 
       }
     	 args[count] = NULL;//else making the last equal to NULL to be used for execvp
 	     ampersand=false;//make sure that ampersand is false
@@ -96,16 +96,16 @@ void forking(char* args[])
     } 
     else if (pid == 0) // child process
     {
-      if(in)
+      if(in) //if the in is recognized
       {
-        int fd = open(file, O_RDONLY);
-        dup2(fd,STDIN_FILENO);
-        close(fd);
+        int fd = open(file, O_RDONLY);//open a file reading only
+        dup2(fd,STDIN_FILENO); //writing to standard in file, the value of  
+        close(fd); //close it
       }
       else if(out)
       {
-        int fd=open(file,O_CREAT |O_TRUNC|O_WRONLY);
-        dup2(fd,STDOUT_FILENO);
+        int fd=open(file,O_CREAT |O_TRUNC|O_WRONLY);//creates a new file with the name file
+        dup2(fd,STDOUT_FILENO);//writing to a standard out file  the value of the open file
         close(fd);
       }
       execvp(args[0], args);//processes the arguments stored in the args[] array
@@ -158,7 +158,7 @@ int main(int argc, char *argv[])
           command[i] = ' '; //
           command[i+1] = '&'; //
           command[i+2] = '\0'; //
-          ampersand=true;
+          ampersand=true;//sets ampersand to true if the & is found
         }
       }
         // Parse the input command
