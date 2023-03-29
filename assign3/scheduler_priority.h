@@ -13,11 +13,23 @@
 #define ASSIGN3_SCHEDULER_PRIORITY_H
 
 #include "scheduler.h"
+#include <queue>
 
 class SchedulerPriority : public Scheduler {
 private:
     // TODO: add necessary member variables here for your implementation
-
+double waitAvg;
+    double turnAvg;
+    struct processes
+    {
+        int id;
+        int burst;
+        int wt; //wait time
+        int tat; //turn around time
+    };
+    queue<processes> rq;
+    queue<processes> fq;
+    double count;//number of processes
 public:
     /**
      * @brief Construct a new SchedulerPriority object

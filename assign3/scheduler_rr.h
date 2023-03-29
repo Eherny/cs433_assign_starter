@@ -12,11 +12,26 @@
 #define ASSIGN3_SCHEDULER_RR_H
 
 #include "scheduler.h"
+#include <queue>
 
 class SchedulerRR : public Scheduler {
 private:
     // TODO: add necessary member variables here for your implementation
-
+double waitAvg;
+    double turnAvg;
+    struct processes
+    {
+        int id;
+        int burst;
+        int wt; //wait time
+        int tat; //turn around time
+        int rt; //remaining time
+        int pr;
+    };
+    queue<processes> rq;
+    queue<processes> fq;
+    int time_quantum;
+    double count;//number of processes
 public:
     /**
      * @brief Construct a new SchedulerRR object
