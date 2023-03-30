@@ -1,7 +1,7 @@
 /**
 * Assignment 3: CPU Scheduler
  * @file scheduler_priority_rr.h
- * @author ??? (TODO: your name)
+ * @author Eric Hernandez and Christopher Mead (TODO: your name)
  * @brief This Scheduler class implements the Priority RR scheduling algorithm.
  * @version 0.1
  */
@@ -15,20 +15,20 @@
 #include <queue>
 class SchedulerPriorityRR : public Scheduler {
 private:
-   double waitAvg;
-    double turnAvg;
+   double waitAvg;//initilize waitavg
+    double turnAvg;//initlize turn avg  
     struct processes
     {
-        int id;
+        int id;//id of the process
         int burst;
         int wt; //wait time
         int tat; //turn around time
         int rt; //remaining time
         int pr;
     };
-    queue<processes> rq;
-    queue<processes> fq;
-    int time_quantum;
+    queue<processes> rq; //ready queue
+    queue<processes> fq; //finished queue
+    int time_quantum; //time quantum
     double count;//number of processes // TODO: add necessary member variables here for your implementation
 
 public:

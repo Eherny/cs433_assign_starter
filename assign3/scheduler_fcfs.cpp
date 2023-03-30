@@ -15,14 +15,14 @@
 
 SchedulerFCFS::SchedulerFCFS()
 {
-     waitAvg=0.0;
+     waitAvg=0.0; //setting the default values of the stored variables in the constructor
      turnAvg=0.0;
      count=0.0;
 }
 
 SchedulerFCFS::~SchedulerFCFS()
 {
-    while(!rq.empty())
+    while(!rq.empty()) //destructor that destroys the queues if they are not empty
     {
         rq.pop();
     };
@@ -31,22 +31,22 @@ SchedulerFCFS::~SchedulerFCFS()
 
 void SchedulerFCFS::init(std::vector<PCB>& process_list)
 {
-    int id=1;
+    int id=1; //the starting id number
     for(auto i=process_list.begin();i!=process_list.end(); i++)
       {
-        int burst = i->burst_time;
-        processes p;
-        p.id=id;
-        p.burst=burst;
-        p.wt=0;
-        p.tat=0;
-        rq.push(p);
-        id++;
-        count++;
+        int burst = i->burst_time; //gets the burst time of the process list and stores it into burst
+        processes p; //makes a process p
+        p.id=id; //sets the id of the process 
+        p.burst=burst; //settings the burst of the process
+        p.wt=0; //sets the default wait time to 0
+        p.tat=0; //sets the default turn around time to 0
+        rq.push(p); // pushes the object into p
+        id++; //incriments id
+        count++; //incriments count
       }
 }
 
-void SchedulerFCFS::print_results()
+void SchedulerFCFS::print_results() //this function princes the avg turn around time and avg wait time o
 {
     
     
@@ -56,9 +56,9 @@ void SchedulerFCFS::print_results()
 
 void SchedulerFCFS::simulate()
 {
-    int total_wait_time = 0;
-    int total_turnaround_time = 0;
-    int current_time = 0;
+    int total_wait_time = 0;//storing the total wait time
+    int total_turnaround_time = 0; //storing the turn around time
+    int current_time = 0; //keeping track of the time
     
     // Run all the processes
     while(!rq.empty())

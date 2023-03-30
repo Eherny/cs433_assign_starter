@@ -1,7 +1,7 @@
 /**
 * Assignment 3: CPU Scheduler
  * @file scheduler_rr.h
- * @author ??? (TODO: your name)
+ * @author Eric Hernandez and Christopher Mead (TODO: your name)
  * @brief This Scheduler class implements the RoundRobin (RR) scheduling algorithm.
  * @version 0.1
  */
@@ -17,11 +17,11 @@
 class SchedulerRR : public Scheduler {
 private:
     // TODO: add necessary member variables here for your implementation
-double waitAvg;
-    double turnAvg;
+double waitAvg;//initilize waitavg
+    double turnAvg; //initilzie turn around avg
     struct processes
     {
-        int id;
+        int id;//make a struct with id burst and priority
         int burst;
         int wt; //wait time
         int tat; //turn around time
@@ -30,7 +30,7 @@ double waitAvg;
     };
     queue<processes> rq;
     queue<processes> fq;
-    int time_quantum;
+    int time_quantum;//initilize the time quantum
     double count;//number of processes
 public:
     /**

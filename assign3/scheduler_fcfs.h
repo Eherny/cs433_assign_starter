@@ -19,17 +19,17 @@ class SchedulerFCFS : public Scheduler {
 private:
     // TODO: add necessary member variables here for your implementation
     
-    double waitAvg;
-    double turnAvg;
-    struct processes
+    double waitAvg;//find the ending wait time 
+    double turnAvg; //finding the ending turn around time
+    struct processes //make a struct called processes that has the id burst wt and turn around time
     {
         int id;
         int burst;
         int wt; //wait time
         int tat; //turn around time
     };
-    queue<processes> rq;
-    queue<processes> fq;
+    queue<processes> rq; //ready queue of processes
+    queue<processes> fq; //final queue of processes
     int count;//number of processes
 
 public:

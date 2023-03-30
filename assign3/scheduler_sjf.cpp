@@ -1,7 +1,7 @@
 /**
 * Assignment 3: CPU Scheduler
  * @file scheduler_sjf.cpp
- * @author ??? (TODO: your name)
+ * @author Eric Hernandez and Christopher Mead (TODO: your name)
  * @brief This Scheduler class implements the SJF scheduling algorithm.
  * @version 0.1
  */
@@ -9,13 +9,13 @@
 // Remember to add sufficient and clear comments to your code
 
 #include "scheduler_sjf.h"
-#include <algorithm>
+#include <algorithm> //algorithm for sort function
 
 // TODO: add implementation of SchedulerFCFS constructor, destrcutor and 
 // member functions init, print_results, and simulate here
 SchedulerSJF::SchedulerSJF()
 {
-     waitAvg=0.0;
+     waitAvg=0.0; //setting defauled values
      turnAvg=0.0;
      count=0.0;
 }
@@ -24,7 +24,7 @@ SchedulerSJF::~SchedulerSJF()
 {
     while(!rq.empty())
     {
-        rq.pop();
+        rq.pop(); //empty queue if not finished
     };
 
 }
@@ -33,16 +33,16 @@ void SchedulerSJF::init(std::vector<PCB>& process_list)
 {
 
     std::sort(process_list.begin(), process_list.end(), [](const PCB& a, const PCB& b) { return a.burst_time < b.burst_time; });
-
+//sort the processes by burst time
     for(auto i=process_list.begin();i!=process_list.end(); i++)
       {
-        int burst = i->burst_time;
-        processes p;
-        p.id=i->id;
-        p.burst=burst;
-        p.wt=0;
-        p.tat=0;
-        rq.push(p);
+        int burst = i->burst_time; //get the burst time
+        processes p; //make a process p
+        p.id=i->id; //get the id from process lsit
+        p.burst=burst; //set burst time to process
+        p.wt=0; //set wait time to 0
+        p.tat=0; //set turn around time to 0
+        rq.push(p); //push object to ready queue
         count++;
       }
 }
@@ -50,7 +50,7 @@ void SchedulerSJF::init(std::vector<PCB>& process_list)
 void SchedulerSJF::print_results()
 {
     
-    
+    //print results
     std::cout << "Average turn-around time = " << turnAvg << ", Average waiting = " << waitAvg << "\n";  
       
 }

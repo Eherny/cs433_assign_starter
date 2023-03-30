@@ -1,7 +1,7 @@
 /**
 * Assignment 3: CPU Scheduler
  * @file scheduler_priority.h
- * @author ??? (TODO: your name)
+ * @author Eric Hernandez and Christopher Mead (TODO: your name)
  * @brief This Scheduler class implements the Priority scheduling algorithm.
  * @version 0.1
  */

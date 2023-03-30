@@ -1,7 +1,7 @@
 /**
 * Assignment 3: CPU Scheduler
  * @file scheduler_fcfs.h
- * @author ??? (TODO: your name)
+ * @author Eric Hernandez and Christopher Mead (TODO: your name)
  * @brief This Scheduler class implements the SJF scheduling algorithm.
  * @version 0.1
  */
@@ -17,17 +17,17 @@
 class SchedulerSJF : public Scheduler {
 private:
     // TODO: add necessary member variables here for your implementation
-    double waitAvg;
-    double turnAvg;
-    struct processes
+    double waitAvg;//for avg wait time
+    double turnAvg; //for avg turn around time
+    struct processes //struct to contain all neccessary processes
     {
         int id;
         int burst;
         int wt; //wait time
         int tat; //turn around time
     };
-    queue<processes> rq;
-    queue<processes> fq;
+    queue<processes> rq; //queue for ready queue
+    queue<processes> fq; //queue for finished queue
     double count;//number of processes
 public:
     /**

@@ -1,7 +1,7 @@
 /**
 * Assignment 3: CPU Scheduler
  * @file scheduler_priority.cpp
- * @author ??? (TODO: your name)
+ * @author Eric Hernandez and Christopher Mead (TODO: your name)
  * @brief This Scheduler class implements the Priority scheduling algorithm.
  * @version 0.1
  */
@@ -10,20 +10,20 @@
 
 
 #include "scheduler_priority.h"
-#include <algorithm>
+#include <algorithm> //algorithim library to support
 
 // TODO: add implementation of SchedulerFCFS constructor, destrcutor and 
 // member functions init, print_results, and simulate here
 SchedulerPriority::SchedulerPriority()
 {
-     waitAvg=0.0;
-     turnAvg=0.0;
+     waitAvg=0.0; //inilize the default values
+     turnAvg=0.0; 
      count=0.0;
 }
 
 SchedulerPriority::~SchedulerPriority()
 {
-    while(!rq.empty())
+    while(!rq.empty()) //delete ready queue if not empty
     {
         rq.pop();
     };
@@ -33,18 +33,18 @@ SchedulerPriority::~SchedulerPriority()
 void SchedulerPriority::init(std::vector<PCB>& process_list)
 {
 
-    std::sort(process_list.begin(), process_list.end(), [](const PCB& a, const PCB& b) { return a.priority > b.priority; });
+    std::sort(process_list.begin(), process_list.end(), [](const PCB& a, const PCB& b) { return a.priority > b.priority; }); //sort process based on priority
 
     for(auto i=process_list.begin();i!=process_list.end(); i++)
       {
-        int burst = i->burst_time;
-        processes p;
-        p.id=i->id;
-        p.burst=burst;
-        p.wt=0;
-        p.tat=0;
-        rq.push(p);
-        count++;
+        int burst = i->burst_time; //get the burst time from the process
+        processes p; //make a process p
+        p.id=i->id; //get the id
+        p.burst=burst; //set the burst into burst
+        p.wt=0; //set wt to 0
+        p.tat=0; //said turn around time to 0
+        rq.push(p); //push object into ready queue
+        count++; //incriment count
       }
 }
 
@@ -52,15 +52,15 @@ void SchedulerPriority::print_results()
 {
     
     
-    std::cout << "Average turn-around time = " << turnAvg << ", Average waiting = " << waitAvg << "\n";  
+    std::cout << "Average turn-around time = " << turnAvg << ", Average waiting = " << waitAvg << "\n";   //turnAvg and waitAvg
       
 }
 
 void SchedulerPriority::simulate()
 {
-    int total_wait_time = 0;
-    int total_turnaround_time = 0;
-    int current_time = 0;
+    int total_wait_time = 0; //initlize wait time
+    int total_turnaround_time = 0; //intizlie turnaround time
+    int current_time = 0; //set current time to 0
     
     // Run all the processes
     while(!rq.empty())
