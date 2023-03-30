@@ -90,23 +90,23 @@ void SchedulerPriorityRR::simulate() {
 
         // Record the start time of the process
         int start_time = current_time;
-if(p.pr!=rq.front().pr||(rq.size()==0))
-{
-rt=p.rt;
-current_time += rt;
- quantum_time= rt;
-rt = 0;
-p.rt = rt;
-}
-else 
-{
+    if(p.pr!=rq.front().pr||(rq.size()==0))
+    {
+        rt=p.rt;
+        current_time += rt;
+        quantum_time= rt;
+        rt = 0;
+        p.rt = rt;
+    }
+    else 
+    {
         // Simulate the execution of the process for the time quantum or until it completes
          rt = p.rt;//get the remaining time
          quantum_time = std::min(time_quantum, rt); //sets the quantium time to the minimum time if it minimum time is less
         current_time += quantum_time;//incriment by the quantum time
         rt -= quantum_time; //subtract the remaining time from the quantum time
         p.rt = rt; //store the value into the remaining time
-}
+    }
         // Print the status of the process
         std::cout << "Running Process T" << p.id << " for " << quantum_time << " time units" << std::endl;
 
