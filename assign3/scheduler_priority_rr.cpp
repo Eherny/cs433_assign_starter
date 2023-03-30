@@ -14,6 +14,7 @@
 // member functions init, print_results, and simulate here
 #include <algorithm> //include libary to use sort
 
+
 // TODO: add implementation of SchedulerFCFS constructor, destrcutor and 
 // member functions init, print_results, and simulate here
 SchedulerPriorityRR::SchedulerPriorityRR(int time_quantum)
@@ -43,7 +44,7 @@ void SchedulerPriorityRR::init(std::vector<PCB>& process_list)
       {
         int burst = i->burst_time; //gets the burst time of each process in list
         processes p; //makes a processes object
-        p.id=i->id; //gets id of processes
+        p.id=i->id+1; //gets id of processes
         p.burst=burst; //puts burst into process
         p.wt=0; //sets process wt to 0
         p.tat=0; //sets process turn around time to 0
@@ -58,7 +59,7 @@ void SchedulerPriorityRR::print_results()
 {
     
     //prints turnavg and waitavg
-    std::cout << "Average turn-around time = " << turnAvg << ", Average waiting = " << waitAvg << "\n";  
+    std::cout << "Average turn-around time = " << turnAvg << ", Average waiting time = " << waitAvg << "\n";  
       
 }
 
@@ -66,7 +67,9 @@ void SchedulerPriorityRR::simulate() {
     int total_wait_time = 0; //store the total wait time
     int total_turnaround_time = 0; //store turn around time
     int current_time = 0; //store current time
-
+    int rt=0;
+    int quantum_time;
+ std::vector<processes> sorted_processes; //make a vector of processes
     while (!rq.empty()) {
         // Sort the processes by priority
         std::vector<processes> sorted_processes; //make a vector of processes
@@ -87,14 +90,23 @@ void SchedulerPriorityRR::simulate() {
 
         // Record the start time of the process
         int start_time = current_time;
-
+if(p.pr!=rq.front().pr||(rq.size()==0))
+{
+rt=p.rt;
+current_time += rt;
+ quantum_time= rt;
+rt = 0;
+p.rt = rt;
+}
+else 
+{
         // Simulate the execution of the process for the time quantum or until it completes
-        int rt = p.rt;//get the remaining time
-        int quantum_time = std::min(time_quantum, rt); //sets the quantium time to the minimum time if it minimum time is less
+         rt = p.rt;//get the remaining time
+         quantum_time = std::min(time_quantum, rt); //sets the quantium time to the minimum time if it minimum time is less
         current_time += quantum_time;//incriment by the quantum time
         rt -= quantum_time; //subtract the remaining time from the quantum time
         p.rt = rt; //store the value into the remaining time
-
+}
         // Print the status of the process
         std::cout << "Running Process T" << p.id << " for " << quantum_time << " time units" << std::endl;
 
@@ -119,7 +131,17 @@ void SchedulerPriorityRR::simulate() {
             fq.push(p);
         }
     }
-
+    
+while (!fq.empty()) {
+            sorted_processes.push_back(fq.front()); //push the proceesses into the vector
+            fq.pop();
+        }
+        std::sort(sorted_processes.begin(), sorted_processes.end(), [](const processes& p1, const processes& p2) { 
+            return p1.id < p2.id; //sorts the vector based on priority
+        });
+        for (const auto& p : sorted_processes) { //push the sorted processes back into the ready queue
+            fq.push(p);
+        }
     // Display the wait and turn-around times for each process
     while (!fq.empty()) {
         processes p = fq.front();

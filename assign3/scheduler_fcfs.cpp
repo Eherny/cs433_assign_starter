@@ -50,7 +50,7 @@ void SchedulerFCFS::print_results() //this function princes the avg turn around 
 {
     
     
-    std::cout << "Average turn-around time = " << turnAvg << ", Average waiting = " << waitAvg << "\n";  
+    std::cout << "Average turn-around time = " << turnAvg << ", Average waiting time = " << waitAvg << "\n";  
       
 }
 

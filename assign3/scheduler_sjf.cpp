@@ -38,7 +38,7 @@ void SchedulerSJF::init(std::vector<PCB>& process_list)
       {
         int burst = i->burst_time; //get the burst time
         processes p; //make a process p
-        p.id=i->id; //get the id from process lsit
+        p.id=i->id+1; //get the id from process lsit
         p.burst=burst; //set burst time to process
         p.wt=0; //set wait time to 0
         p.tat=0; //set turn around time to 0
@@ -51,7 +51,7 @@ void SchedulerSJF::print_results()
 {
     
     //print results
-    std::cout << "Average turn-around time = " << turnAvg << ", Average waiting = " << waitAvg << "\n";  
+    std::cout << "Average turn-around time = " << turnAvg << ", Average waiting time = " << waitAvg << "\n";  
       
 }
 
@@ -60,7 +60,7 @@ void SchedulerSJF::simulate()
     int total_wait_time = 0;
     int total_turnaround_time = 0;
     int current_time = 0;
-    
+    std::vector<processes> sorted_processes; //make a vector of processes
     // Run all the processes
     while(!rq.empty())
     {
@@ -95,7 +95,16 @@ void SchedulerSJF::simulate()
         // Add the process to the finished queue
         fq.push(p);
    }
-
+while (!fq.empty()) {
+            sorted_processes.push_back(fq.front()); //push the proceesses into the vector
+            fq.pop();
+        }
+        std::sort(sorted_processes.begin(), sorted_processes.end(), [](const processes& p1, const processes& p2) { 
+            return p1.id < p2.id; //sorts the vector based on priority
+        });
+        for (const auto& p : sorted_processes) { //push the sorted processes back into the ready queue
+            fq.push(p);
+        }
    // Display the wait and turn-around times for each process
    while (!fq.empty())
    {

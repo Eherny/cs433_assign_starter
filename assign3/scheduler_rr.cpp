@@ -41,7 +41,7 @@ void SchedulerRR::init(std::vector<PCB>& process_list)
       {
         int burst = i->burst_time; //get burst time
         processes p; //make a process object
-        p.id=i->id; //get the id
+        p.id=i->id+1; //get the id
         p.burst=burst; //set the burst time to captured burst time
         p.wt=0; //set wt to 0
         p.tat=0; //set turn around time to 0
@@ -56,7 +56,7 @@ void SchedulerRR::print_results()
 {
     
     //prints out turnavg and wait avg results
-    std::cout << "Average turn-around time = " << turnAvg << ", Average waiting = " << waitAvg << "\n";  
+    std::cout << "Average turn-around time = " << turnAvg << ", Average waiting time = " << waitAvg << "\n";  
       
 }
 
@@ -65,7 +65,7 @@ void SchedulerRR::simulate() {
     int total_turnaround_time = 0; //initilize turn around time
     int current_time = 0; //initilize the current time
 
-
+ std::vector<processes> sorted_processes; //make a vector of processes
 
   
     while (!rq.empty()) {
@@ -107,7 +107,16 @@ void SchedulerRR::simulate() {
             fq.push(p);
         }
     }
-
+while (!fq.empty()) {
+            sorted_processes.push_back(fq.front()); //push the proceesses into the vector
+            fq.pop();
+        }
+        std::sort(sorted_processes.begin(), sorted_processes.end(), [](const processes& p1, const processes& p2) { 
+            return p1.id < p2.id; //sorts the vector based on priority
+        });
+        for (const auto& p : sorted_processes) { //push the sorted processes back into the ready queue
+            fq.push(p);
+        }
     // Display the wait and turn-around times for each process
     while (!fq.empty()) {
         processes p = fq.front();
