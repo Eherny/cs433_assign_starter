@@ -22,7 +22,7 @@ Replacement::Replacement(int num_pages, int num_frames)
     this->max_frames=num_frames;
     num_references=0;
     num_faults=0;
-    num_frames=0;
+    num_replacements=0;
 }
 
 // Destructor
@@ -56,7 +56,7 @@ bool Replacement::access_page(int page_num, bool is_write)
     else
     {
         num_replacements++;
-        replace_page(num_frames);
+        replace_page(page_num);
     }
     return true;
     }

@@ -25,10 +25,20 @@ LIFOReplacement::~LIFOReplacement() {
 // Access an invalid page, but free frames are available
 void LIFOReplacement::load_page(int page_num) {
     // TODO: Add necessary code here
+    page_table[page_num].frame_num = max_frames - num_frames; // Assigning it
+    page_table[page_num].valid = true; // 
+    page_stack.push(page_num);
+    num_frames--;
 }
 
 // Access an invalid page and no free frames are available
 int LIFOReplacement::replace_page(int page_num) {
     // TODO: Add necessary code here
+    int front_num = page_stack.top(); // Get the page number top of the queue
+    page_stack.pop();
+    page_stack.push(page_num);
+    // page_table[page_num].frame_num = page_table[front_num].frame_num; // Set the frame number
+    page_table[page_num].valid = true;
+    page_table[front_num].valid = false; // Set to false
     return 0;
 }

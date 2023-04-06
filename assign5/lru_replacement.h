@@ -13,13 +13,15 @@
 // Remember to add comments to your code
 
 #include "replacement.h"
+#include <list>
+#include <unordered_map>
 
 /**
  * @brief A class to simulate the least recently used (LRU) page replacement algorithm.
  */
 class LRUReplacement : public Replacement
 {
-	// TODO: Add your implementation to this class
+	list<int> page_list;// TODO: Add your implementation to this class
 public:
 	/**
 	 * @brief Constructor
