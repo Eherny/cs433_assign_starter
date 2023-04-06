@@ -9,7 +9,6 @@
 // Remember to add sufficient and clear comments to your code
 #include <iostream>
 #include "buffer.h"
-#include "buffer.cpp"
 #include <unistd.h>
 #include <pthread.h>
 #include <semaphore.h>
