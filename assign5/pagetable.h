@@ -12,6 +12,7 @@
 
 // Remember to add comments to your code
 #include <vector>
+#include <iostream>
 using namespace std;
 
 // A page table entry

@@ -21,7 +21,7 @@
 class FIFOReplacement : public Replacement {
 private:
     // TODO: Add necessary member variables to this class
-queue<int> page;
+queue<int> page_queue;
 public:
     /**
      * @brief Constructor

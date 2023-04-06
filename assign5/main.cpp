@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <cmath>
 #include <vector>
+#include <chrono>
 
 #include "fifo_replacement.h"
 #include "lru_replacement.h"
@@ -96,15 +97,15 @@ int main(int argc, char *argv[]) {
     // Test 2: Read and simulate the large list of logical addresses from the input file "large_refs.txt"
     std::cout << "\n================================Test 2==================================================\n";
     std::ifstream in2;
-    in2.open("largue_refs.txt")
-    if(!in.is_open()){
+    in2.open("large_refs.txt");
+    if(!in2.is_open()){
         std::cerr<< "cannot open large_refs.txt to read. Please check your path." << std::endl;
         return 1;
     }
-    int val;
+    int val2;
     std::vector<int> large_refs;
-    while(in2 >> val){
-        large_refs.push_back(val);
+    while(in2 >> val2){
+        large_refs.push_back(val2);
     }
     in2.close();
 
@@ -123,7 +124,7 @@ int main(int argc, char *argv[]) {
     fifo.print_statistics();
     auto end = std::chrono::high_resolution_clock::now(); 
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
-    std::cout<<duration<<" is the run-time for the fifo replacement algorithm"
+    std::cout<<duration<<" is the run-time for the fifo replacement algorithm"<<std::endl;
     LIFOReplacement lifo(num_pages,num_frames);
     std::cout << "****************Simulate LIFO replacement****************************" << std::endl;
     // TODO: Add your code to calculate number of page faults using LIFO replacement algorithm
@@ -139,8 +140,8 @@ int main(int argc, char *argv[]) {
     lifo.print_statistics();
     auto end2 = std::chrono::high_resolution_clock::now();
     auto duration2 = std::chrono::duration_cast<std::chrono::microseconds>(end2 - start2).count();
-    std::cout<< duration2 << " is the run-time for lifo replacement algorithm"
-    LRUReplacement lru(num_pages,num_frames)
+    std::cout<< duration2 << " is the run-time for lifo replacement algorithm"<<std::endl;
+    LRUReplacement lru(num_pages,num_frames);
     std::cout << "****************Simulate LRU replacement****************************" << std::endl;
     // TODO: Add your code to calculate number of page faults using LRU replacement algorithm
      auto start3 = std::chrono::high_resolution_clock::now();
@@ -155,6 +156,6 @@ int main(int argc, char *argv[]) {
     lru.print_statistics();
      auto end3 = std::chrono::high_resolution_clock::now();
     auto duration3 = std::chrono::duration_cast<std::chrono::microseconds>(end3 - start3).count();
-    std::cout<< duration3 << " is the run-time for the lru replacement algorithm"
+    std::cout<< duration3 << " is the run-time for the lru replacement algorithm"<<std::endl;
 
 }

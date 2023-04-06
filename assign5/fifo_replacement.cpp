@@ -25,10 +25,20 @@ FIFOReplacement::~FIFOReplacement() {
 // Access an invalid page, but free frames are available
 void FIFOReplacement::load_page(int page_num) {
     // TODO: Update your data structure FIFO replacement and pagetable
+  page_table[page_num].frame_num = max_frames - num_frames; // Assigning it
+    page_table[page_num].valid = true; // 
+    page_queue.push(page_num);
+    num_frames--;
 }
 
 // Access an invalid page and no free frames are available
 int FIFOReplacement::replace_page(int page_num) {
     // TODO: Update your data structure FIFO replacement and pagetable
+    int front_num = page_queue.front(); // Get the page number top of the queue
+    page_queue.pop();
+    page_queue.push(page_num);
+    // page_table[page_num].frame_num = page_table[front_num].frame_num; // Set the frame number
+    page_table[page_num].valid = true;
+    page_table[front_num].valid = false; // Set to false
     return 0;
 }
