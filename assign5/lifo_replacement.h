@@ -13,6 +13,7 @@
 // Remember to add comments to your code
 
 #include "replacement.h"
+#include <queue>
 
 /**
  * @brief A class to simulate LIFO (last in first out) page replacement algorithm.
