@@ -116,8 +116,7 @@ int main(int argc, char *argv[]) {
         int page_num = (*it) >> page_offset_bits;
         bool isPageFault = fifo.access_page(page_num, 0);
         PageEntry pg = fifo.getPageEntry(page_num);
-        //std::cout << "Logical address: " << *it << ", \tpage number: " << page_num;
-        //std::cout << ", \tframe number = " << pg.frame_num << ", \tis page fault? " << isPageFault << std::endl;
+    
     }
     // TODO: Add your code to calculate number of page faults using FIFO replacement algorithm
     // TODO: print the statistics and run-time
@@ -134,8 +133,7 @@ int main(int argc, char *argv[]) {
         int page_num = (*it) >> page_offset_bits;
         bool isPageFault = lifo.access_page(page_num, 0);
         PageEntry pg = lifo.getPageEntry(page_num);
-        //std::cout << "Logical address: " << *it << ", \tpage number: " << page_num;
-        //std::cout << ", \tframe number = " << pg.frame_num << ", \tis page fault? " << isPageFault << std::endl;
+ 
     }
     // TODO: print the statistics and run-time
     auto end2 = std::chrono::high_resolution_clock::now();
@@ -150,8 +148,6 @@ int main(int argc, char *argv[]) {
         int page_num = (*it) >> page_offset_bits;
         bool isPageFault = lru.access_page(page_num, 0);
         PageEntry pg = lru.getPageEntry(page_num);
-        //std::cout << "Logical address: " << *it << ", \tpage number: " << page_num;
-        //std::cout << ", \tframe number = " << pg.frame_num << ", \tis page fault? " << isPageFault << std::endl;
     }
     // TODO: print the statistics and run-time
     lru.print_statistics();
