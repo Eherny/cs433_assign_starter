@@ -107,6 +107,8 @@ int main(int argc, char *argv[]) {
     while(in2 >> val2){
         large_refs.push_back(val2);
     }
+    std::cout<<"Total number of references: "<<large_refs.size()<<std::endl;
+
 
     
     std::cout << "****************Simulate FIFO replacement****************************" << std::endl;
