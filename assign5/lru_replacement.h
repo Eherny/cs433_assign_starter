@@ -21,7 +21,8 @@
  */
 class LRUReplacement : public Replacement
 {
-	list<int> page_list;// TODO: Add your implementation to this class
+	list<int> page_queue;// TODO: Add your implementation to this class
+     unordered_map<int, list<int>::iterator> page_map;
 public:
 	/**
 	 * @brief Constructor
