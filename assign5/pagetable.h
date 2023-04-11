@@ -1,7 +1,7 @@
 /**
 * Assignment 5: Page replacement algorithms
  * @file pagetable.h
- * @author ??? (TODO: your name)
+ * @author Eric Hernandez & Chris Mead (TODO: your name)
  * @brief This class represents a traditional pagetable data structure.
  * @version 0.1
  */

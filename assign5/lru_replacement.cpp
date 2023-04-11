@@ -1,7 +1,7 @@
 /**
 * Assignment 5: Page replacement algorithms
  * @file lru_replacement.cpp
- * @author ??? (TODO: your name)
+ * @author Eric Hernandez & Chris Mead (TODO: your name)
  * @brief A class implementing the LRU page replacement algorithms
  * @version 0.1
  */
