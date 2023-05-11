@@ -92,29 +92,29 @@ int main(int argc, char *argv[]) {
         std::cout << ", \tframe number = " << pg.frame_num << ", \tis page fault? " << isPageFault << std::endl;
     }
     in.close();
-    vm.print_statistics();
+    vm.print_statistics();//print out the statistics of the Test
 
     // Test 2: Read and simulate the large list of logical addresses from the input file "large_refs.txt"
     std::cout << "\n================================Test 2==================================================\n";
     std::ifstream in2;
-    in2.open("large_refs.txt");
-    if(!in2.is_open()){
+    in2.open("large_refs.txt"); //open the large references page
+    if(!in2.is_open()){ //if it is unable to open the file
         std::cerr<< "cannot open large_refs.txt to read. Please check your path." << std::endl;
         return 1;
     }
-    int val2;
-    std::vector<int> large_refs;
+    int val2;//value to grab data from
+    std::vector<int> large_refs; //create a vector to store references
     while(in2 >> val2){
-        large_refs.push_back(val2);
+        large_refs.push_back(val2); //push the data from the file onto the vector
     }
-    std::cout<<"Total number of references: "<<large_refs.size()<<std::endl;
+    std::cout<<"Total number of references: "<<large_refs.size()<<std::endl; //get the total amount of reference numbers
 
 
     
     std::cout << "****************Simulate FIFO replacement****************************" << std::endl;
-     auto start = std::chrono::high_resolution_clock::now();
-     FIFOReplacement fifo(num_pages,num_frames);
-    for (std::vector<int>::const_iterator it = large_refs.begin(); it != large_refs.end(); ++it) {
+     auto start = std::chrono::high_resolution_clock::now(); //start the time
+     FIFOReplacement fifo(num_pages,num_frames); //create a virtual memory simulating for the FIFO algorithm
+    for (std::vector<int>::const_iterator it = large_refs.begin(); it != large_refs.end(); ++it) { //run the algorithm
         int page_num = (*it) >> page_offset_bits;
         bool isPageFault = fifo.access_page(page_num, 0);
         PageEntry pg = fifo.getPageEntry(page_num);
@@ -122,40 +122,40 @@ int main(int argc, char *argv[]) {
     }
     // TODO: Add your code to calculate number of page faults using FIFO replacement algorithm
     // TODO: print the statistics and run-time
-     auto end = std::chrono::high_resolution_clock::now(); 
-    fifo.print_statistics();
+     auto end = std::chrono::high_resolution_clock::now(); //stop the timer
+    fifo.print_statistics(); //print the statistsics of the algorhthm
    
-    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
-    std::cout << "Elapsed time = " << std::fixed << std::setprecision(6) << duration / 1000000.0 << " seconds" << std::endl;
-    LIFOReplacement lifo(num_pages,num_frames);
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();//get the duration to output time
+    std::cout << "Elapsed time = " << std::fixed << std::setprecision(6) << duration / 1000000.0 << " seconds" << std::endl;//output duration
+    LIFOReplacement lifo(num_pages,num_frames);//create a virtual memory simulator for LIFO
     std::cout << "****************Simulate LIFO replacement****************************" << std::endl;
     // TODO: Add your code to calculate number of page faults using LIFO replacement algorithm
-    auto start2 = std::chrono::high_resolution_clock::now();
-    for (std::vector<int>::const_iterator it = large_refs.begin(); it != large_refs.end(); ++it) {
+    auto start2 = std::chrono::high_resolution_clock::now();//start time
+    for (std::vector<int>::const_iterator it = large_refs.begin(); it != large_refs.end(); ++it) {//run the algorithm
         int page_num = (*it) >> page_offset_bits;
         bool isPageFault = lifo.access_page(page_num, 0);
         PageEntry pg = lifo.getPageEntry(page_num);
  
     }
     // TODO: print the statistics and run-time
-    auto end2 = std::chrono::high_resolution_clock::now();
-    lifo.print_statistics();
+    auto end2 = std::chrono::high_resolution_clock::now();//end time
+    lifo.print_statistics(); //print the statistics
      auto duration2 = std::chrono::duration_cast<std::chrono::microseconds>(end2 - start2).count();
-    std::cout << "Elapsed time = " << std::fixed << std::setprecision(6) << duration2 / 1000000.0 << " seconds" << std::endl;
-    LRUReplacement lru(num_pages,num_frames);
+    std::cout << "Elapsed time = " << std::fixed << std::setprecision(6) << duration2 / 1000000.0 << " seconds" << std::endl;//print out time
+    LRUReplacement lru(num_pages,num_frames);// create a virtual simulator of the LRU replacement algo
     std::cout << "****************Simulate LRU replacement****************************" << std::endl;
     // TODO: Add your code to calculate number of page faults using LRU replacement algorithm
-     auto start3 = std::chrono::high_resolution_clock::now();
-    for (std::vector<int>::const_iterator it = large_refs.begin(); it != large_refs.end(); ++it) {
+     auto start3 = std::chrono::high_resolution_clock::now();//start time
+    for (std::vector<int>::const_iterator it = large_refs.begin(); it != large_refs.end(); ++it) { //run the algo
         int page_num = (*it) >> page_offset_bits;
         bool isPageFault = lru.access_page(page_num, 0);
         PageEntry pg = lru.getPageEntry(page_num);
     }
     // TODO: print the statistics and run-time
-    lru.print_statistics();
-     auto end3 = std::chrono::high_resolution_clock::now();
-     auto duration3 = std::chrono::duration_cast<std::chrono::microseconds>(end3 - start3).count();
-    std::cout << "Elapsed time = " << std::fixed << std::setprecision(6) << duration3 / 1000000.0 << " seconds" << std::endl;
-    in2.close();
+    lru.print_statistics();//print out the statistiscs
+     auto end3 = std::chrono::high_resolution_clock::now();// end the time
+     auto duration3 = std::chrono::duration_cast<std::chrono::microseconds>(end3 - start3).count();//get the duration
+    std::cout << "Elapsed time = " << std::fixed << std::setprecision(6) << duration3 / 1000000.0 << " seconds" << std::endl;//print out the duration
+    in2.close();//close the file access
 
 }

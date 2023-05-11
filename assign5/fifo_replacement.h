@@ -13,7 +13,7 @@
 // Remember to add comments to your code
 
 #include "replacement.h"
-#include <queue>
+#include <queue> //use a queue to implement
 
 /**
  * @brief A class to simulate FIFO page replacement algorithm.
@@ -21,7 +21,7 @@
 class FIFOReplacement : public Replacement {
 private:
     // TODO: Add necessary member variables to this class
-queue<int> page_queue;
+queue<int> page_queue; //create a queue of ints called page queue
 public:
     /**
      * @brief Constructor

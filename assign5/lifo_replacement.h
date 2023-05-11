@@ -13,7 +13,7 @@
 // Remember to add comments to your code
 
 #include "replacement.h"
-#include <stack>
+#include <stack> //use a stack to implement LIFO
 
 /**
  * @brief A class to simulate LIFO (last in first out) page replacement algorithm.
@@ -21,7 +21,7 @@
 class LIFOReplacement : public Replacement {
 private:
     // TODO: Add necessary member variables to this class
-stack<int> page_stack;
+stack<int> page_stack;//create a stack of ints called page stack
 public:
     /**
      * @brief Constructor

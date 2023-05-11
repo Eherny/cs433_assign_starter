@@ -26,8 +26,8 @@ LIFOReplacement::~LIFOReplacement() {
 void LIFOReplacement::load_page(int page_num) {
     // TODO: Add necessary code here
     page_table[page_num].frame_num = max_frames - num_frames; // Assigning it
-    page_table[page_num].valid = true; // 
-    page_stack.push(page_num);
+    page_table[page_num].valid = true; // if the page number is valid
+    page_stack.push(page_num);//push the page number onto the stack
     num_frames--;
 }
 

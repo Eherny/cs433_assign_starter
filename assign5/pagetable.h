@@ -42,7 +42,7 @@ class PageTable
 {
 private:
     // A page table is like an array of page entries.
-    vector<PageEntry> pages;
+    vector<PageEntry> pages; //create a vector of pageEntry's called pages
 public:
     // Constructor
     PageTable(int num_pages);

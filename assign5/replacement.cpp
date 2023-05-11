@@ -39,26 +39,26 @@ bool Replacement::access_page(int page_num, bool is_write)
     // If the page is valid, it calls the touch_page function. 
     // If the page is not valid but free frames are available, it calls the load_page function.
     // If the page is not valid and there is no free frame, it calls the replace_page function.
-    num_references++;
-    if(page_table[page_num].valid)
+    num_references++;//increment references when page is accessed
+    if(page_table[page_num].valid) //if the page is valid
     {
-    touch_page(page_num);
-     return false;
+    touch_page(page_num); //make that the page was number was touched
+     return false; //return false that a page wasnt replaced
     }
     else
     {
-    num_faults++;
-    if(num_frames>0)
+    num_faults++; //increment faults since page number isnt valid
+    if(num_frames>0) //if there are moreframes availble
     {
-        load_page(page_num);
+        load_page(page_num); //call load page to load the page number to the frame
     
     }
     else
     {
-        num_replacements++;
-        replace_page(page_num);
+        num_replacements++; //increment page replacements
+        replace_page(page_num); //replace the page
     }
-    return true;
+    return true; //return true that a page was replace
     }
 
 }

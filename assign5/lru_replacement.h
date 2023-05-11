@@ -13,16 +13,16 @@
 // Remember to add comments to your code
 
 #include "replacement.h"
-#include <list>
-#include <unordered_map>
+#include <list>//using a list for this implementation
+#include <unordered_map>//used an unordered map in order to implement
 
 /**
  * @brief A class to simulate the least recently used (LRU) page replacement algorithm.
  */
 class LRUReplacement : public Replacement
 {
-	list<int> page_queue;// TODO: Add your implementation to this class
-     unordered_map<int, list<int>::iterator> page_map;
+	list<int> page_queue;//create a list of ints called a page queue// TODO: Add your implementation to this class
+     unordered_map<int, list<int>::iterator> page_map;//create an unordered map of ints. as well as using an iterator to iterage through the list
 public:
 	/**
 	 * @brief Constructor

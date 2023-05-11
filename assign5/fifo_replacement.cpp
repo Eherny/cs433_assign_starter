@@ -26,9 +26,9 @@ FIFOReplacement::~FIFOReplacement() {
 void FIFOReplacement::load_page(int page_num) {
     // TODO: Update your data structure FIFO replacement and pagetable
   page_table[page_num].frame_num = max_frames - num_frames; // Assigning it
-    page_table[page_num].valid = true; // 
-    page_queue.push(page_num);
-    num_frames--;
+    page_table[page_num].valid = true; // if page number is valid
+    page_queue.push(page_num);//push the page num onto the queue
+    num_frames--;//decrement number of frames availble
 }
 
 // Access an invalid page and no free frames are available
